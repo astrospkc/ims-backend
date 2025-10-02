@@ -139,4 +139,50 @@ router.get("/getalluser", async (req, res) => {
   }
 });
 
+router.delete("/deleteuser/:userid", async (req, res) => {
+  try {
+    // const userId = req.user.id;
+    const userId = req.params.userid;
+    const user = await User.findByIdAndDelete(userId);
+    res.json({ success: "user has been deleted", user: user });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal error occurred");
+  }
+});
+
+router.put("/updateuser/:userid", async (req, res) => {
+  try {
+    const { userid } = req.params;
+    const { name, email, password, role } = req.body;
+
+    // Create an object to hold the updated fields
+    const updatedData = {};
+    if (name) updatedData.name = name;
+    if (email) updatedData.email = email;
+    if (role) updatedData.role = role;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const secPass = bcrypt.hashSync(password, salt);
+      updatedData.password = secPass;
+    }
+
+    // Find the user by ID and update with the new data
+    const user = await User.findByIdAndUpdate(
+      userid,
+      { $set: updatedData },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ success: "User has been updated", user: user });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal error occurred");
+  }
+});
+
 export default router;

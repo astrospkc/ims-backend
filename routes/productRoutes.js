@@ -149,6 +149,53 @@ const deleteProductWithId = async (req, res) => {
 const updateProductWithId = async (req, res) => {
   try {
     const { productId } = req.params;
+    const {
+      name,
+      description,
+      brand,
+      category,
+      price,
+      currency,
+      stock,
+      availability,
+    } = req.body;
+    const prev_product = await Product.findById(productId);
+    if (!prev_product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    }
+    let new_stock = prev_product.stock + Number(stock || 0);
+    const updatedData = {};
+    if (name)
+      updatedData.name = typeof name === "string" ? name.toLowerCase() : name;
+    if (description)
+      updatedData.description =
+        typeof description === "string"
+          ? description.toLowerCase()
+          : description;
+    if (brand)
+      updatedData.brand =
+        typeof brand === "string" ? brand.toLowerCase() : brand;
+    if (category)
+      updatedData.category =
+        typeof category === "string" ? category.toLowerCase() : category;
+    if (price !== undefined) updatedData.price = Number(price);
+    if (currency)
+      updatedData.currency =
+        typeof currency === "string" ? currency.toLowerCase() : currency;
+    if (stock !== undefined) updatedData.stock = Number(new_stock);
+    if (availability)
+      updatedData.availability =
+        typeof availability === "string"
+          ? availability.toLowerCase()
+          : availability;
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      { $set: updatedData },
+      { new: true }
+    );
+    res.json({ success: true, product: updatedProduct });
   } catch (error) {
     res.status(500).send("Internal error occurred while updating the product");
   }
