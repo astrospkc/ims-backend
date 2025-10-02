@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-
+import dotenv from "dotenv";
+dotenv.config();
 const JWT_secret = process.env.JWT_TOKEN;
 
 const fetchuser = async (req, res, next) => {

@@ -90,16 +90,9 @@ router.post(
           id: user.id,
         },
       };
-
-      console.log("login");
-
       // const authtoken = jwt.sign({ data }, JWT_SECRET, { expiresIn: "1h" });
       const authtoken = jwt.sign(data, JWT_SECRET);
-
       success = true;
-      // console.log("req.headers: ", req.headers);
-      console.log(success, authtoken);
-
       res.json({ success, authtoken });
       // }
     } catch (error) {
