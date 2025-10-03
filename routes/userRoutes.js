@@ -18,7 +18,7 @@ router.post(
   "/createuser",
 
   async (req, res) => {
-    // console.log(req.body);
+    console.log(req.body);
     let success = false;
 
     try {

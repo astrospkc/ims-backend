@@ -32,7 +32,7 @@ const ProductSchema = new Schema(
     },
     availability: {
       type: String,
-      default: "in stock", // out of stack
+      default: "in_stock", // out of stack
     },
   },
   {

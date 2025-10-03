@@ -5,7 +5,7 @@ import fetchuser from "../middleware/fetchUser.js";
 const router = express.Router();
 
 const addNewProduct = async (req, res) => {
-  //   console.log("req.body: ", req.body);
+  console.log("req.body: ", req.body);
   try {
     const {
       name,
@@ -37,6 +37,7 @@ const addNewProduct = async (req, res) => {
           ? availability.toLowerCase()
           : availability,
     });
+    // console.log("product to be added: ", product);
     const savedProduct = await product.save();
     res.json({
       success: true,
